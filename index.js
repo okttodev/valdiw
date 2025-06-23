@@ -8,7 +8,7 @@ const DATA_FILE = './data.json';
 
 app.use(express.json());
 
-// Helper function
+// Helper function untuk baca & tulis data
 function readData() {
   const data = fs.readFileSync(DATA_FILE, 'utf8');
   return JSON.parse(data);
@@ -18,7 +18,17 @@ function writeData(data) {
   fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
 }
 
-// GET All Users
+// ✅ Tampilkan seluruh isi data.json saat mengakses "/"
+app.get('/', (req, res) => {
+  try {
+    const data = readData();
+    res.json(data);
+  } catch (err) {
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+// GET semua users
 app.get('/users', (req, res) => {
   try {
     const data = readData();
@@ -28,7 +38,7 @@ app.get('/users', (req, res) => {
   }
 });
 
-// GET One User by ID
+// GET user berdasarkan ID
 app.get('/users/:id', (req, res) => {
   try {
     const data = readData();
@@ -40,7 +50,7 @@ app.get('/users/:id', (req, res) => {
   }
 });
 
-// POST Create New User
+// POST buat user baru
 app.post('/users', (req, res) => {
   try {
     const data = readData();
@@ -56,7 +66,7 @@ app.post('/users', (req, res) => {
   }
 });
 
-// PUT Update User by ID
+// PUT update user by ID
 app.put('/users/:id', (req, res) => {
   try {
     const data = readData();
@@ -71,7 +81,7 @@ app.put('/users/:id', (req, res) => {
   }
 });
 
-// DELETE User by ID
+// DELETE hapus user by ID
 app.delete('/users/:id', (req, res) => {
   try {
     let data = readData();
@@ -86,7 +96,7 @@ app.delete('/users/:id', (req, res) => {
   }
 });
 
-// Server run
+// Jalankan server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
